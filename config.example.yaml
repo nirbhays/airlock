@@ -1,0 +1,49 @@
+# Airlock Configuration
+# Copy to airlock.yaml and customize
+
+# Server settings
+host: "0.0.0.0"
+port: 8080
+log_level: "info"
+
+# Set to true for testing without an upstream LLM API
+demo_mode: false
+
+# Upstream LLM API
+upstream:
+  base_url: "https://api.openai.com/v1"
+  api_key: ""  # Or set AIRLOCK_UPSTREAM__API_KEY env var
+  timeout_seconds: 30.0
+  max_retries: 2
+
+# Security scanning
+security:
+  pii_detection_enabled: true
+  prompt_injection_enabled: true
+  scan_responses: true
+
+  # Custom PII rules (defaults are always loaded)
+  # pii_rules:
+  #   - name: "custom_id"
+  #     pattern: "CUST-\\d{6}"
+  #     replacement: "[CUSTOMER_ID_REDACTED]"
+  #     enabled: true
+
+  # Custom injection rules
+  # prompt_injection_rules:
+  #   - name: "custom_block"
+  #     pattern: "(?i)override\\s+safety"
+  #     severity: "high"
+  #     enabled: true
+
+# Rate limiting
+rate_limit:
+  enabled: true
+  requests_per_minute: 60
+  tokens_per_minute: 100000
+
+# Cost tracking
+cost_tracking:
+  enabled: true
+  budget_limit_usd: null  # Set a USD limit per API key
+  log_usage: true
