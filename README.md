@@ -159,6 +159,65 @@ ruff check src/ tests/
 mypy src/
 ```
 
+
+## Why Airlock?
+
+You're sending user input directly to LLM APIs. That means:
+- PII (emails, SSNs, credit cards) leaking to third-party servers
+- Prompt injection attacks going undetected
+- No rate limiting = surprise billing
+- No audit trail for compliance
+
+Airlock sits between your app and the LLM API — one environment variable change, full security pipeline.
+
+## Installation
+
+```bash
+pip install airlock-proxy
+```
+
+## Quick Start
+
+```bash
+# Start Airlock
+airlock start --port 8080
+
+# Point your app at Airlock instead of OpenAI
+export OPENAI_BASE_URL=http://localhost:8080/v1
+```
+
+Your existing code is unchanged. All calls now pass through Airlock's security pipeline.
+
+## What Gets Scanned
+
+```
+User input: "My email is john@example.com, summarise this..."
+                          ↓ Airlock
+Redacted:   "My email is [EMAIL], summarise this..."
+                          ↓
+                      OpenAI API
+```
+
+**PII detected**: emails, phone numbers, SSNs, credit cards, IP addresses, names
+**Injections detected**: jailbreak attempts, role override, prompt leaking, data exfiltration patterns
+
+## Compared to Alternatives
+
+| | Airlock | LakeraGuard | PromptArmor |
+|---|---|---|---|
+| Self-hosted | Yes | No | No |
+| PII redaction | Yes | Yes | Partial |
+| Injection detection | 6 detectors | Yes | Yes |
+| Rate limiting | Yes | No | No |
+| Cost tracking | Yes | No | No |
+| Open source | Yes | No | No |
+
+## Project Links
+
+- 📋 [Roadmap](ROADMAP.md)
+- 🤝 [Contributing](CONTRIBUTING.md)
+- 🐛 [Issues](https://github.com/nirbhays/airlock/issues)
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
